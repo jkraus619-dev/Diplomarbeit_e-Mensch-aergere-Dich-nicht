@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <h1>Login</h1>
+    <label for="username">Benutzername</label>
+    <input type="text" id="username" autocomplete="username" placeholder="Benutzername">
+    <label for="password">Passwort</label>
+    <input type="password" id="password" autocomplete="current-password" placeholder="Passwort">
+    <button type="button" onclick="login()">Anmelden</button>
+    <div id="log" class="feedback"></div>
+    <p>Noch kein Konto?</p>
+    <a class="link" href="register.html">Registrieren</a>
+  </main>
+</body>
+</html>

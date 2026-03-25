@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Spiel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/ws-client.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/game-ui.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="spiel.html">Spiel</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="stats.html">Statistiken</a></li>
+      <li><a href="battery.html">Akku</a></li>
+      <li class="nav-logout"><a class="logout-link" href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="dashboard-container">
+    <h1>Spiel</h1>
+    <p class="dashboard-subtitle">W&uuml;rfeln, Figur w&auml;hlen, Zug best&auml;tigen.</p>
+
+    <section class="game-section">
+      <h2>Spieler</h2>
+      <ul id="gamePlayers" class="game-player-list"></ul>
+    </section>
+
+    <section class="game-section">
+      <h2>Aktionen</h2>
+      <div class="game-actions">
+        <button type="button" onclick="rollDiceButton()">W&uuml;rfeln</button>
+        <div class="dice-result">Letztes Ergebnis: <span id="diceResult">-</span></div>
+      </div>
+
+      <div class="game-form">
+        <label for="pieceNumber">Figur</label>
+        <select id="pieceNumber" onchange="selectedPiece()"></select>
+      </div>
+
+      <div class="game-actions">
+        <button type="button" onclick="confirmSelection()">Zug best&auml;tigen</button>
+      </div>
+
+      <div id="gameFeedback" class="dashboard-feedback"></div>
+      <div id="wsLog" class="log">WebSocket: nicht verbunden</div>
+    </section>
+  </main>
+</body>
+</html>

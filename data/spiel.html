@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Spiel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/ws-client.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/lobby.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="spiel.html">Spiel</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="stats.html">Statistiken</a></li>
+      <li><a href="battery.html">Akku</a></li>
+      <li class="nav-logout"><a class="logout-link" href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="dashboard-container">
+    <h1>Spiel</h1>
+    <p class="dashboard-subtitle">W&auml;hle aus, was du mit der Lobby machen m&ouml;chtest.</p>
+
+    <section class="dashboard-actions">
+      <h2>Lobby</h2>
+      <div class="actions-grid">
+        <button id="btnCreateLobby" class="link-button" type="button" onclick="createLobbyAndOpen()">Lobby erstellen</button>
+        <button id="btnJoinLobby" class="link-button" type="button" onclick="joinLobbyFromDashboard()">Aktiver Lobby beitreten</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

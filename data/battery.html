@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Akku</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/ws-client.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/battery-ui.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="spiel.html">Spiel</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="stats.html">Statistiken</a></li>
+      <li><a href="battery.html">Akku</a></li>
+      <li class="nav-logout"><a class="logout-link" href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="battery">
+    <h1>Akku&uuml;berwachung</h1>
+    <p class="dashboard-subtitle">Live-Daten vom ESP32.</p>
+
+    <div class="battery-icon">
+      <div id="batteryFill" class="battery-fill"></div>
+    </div>
+
+    <div class="battery-meta">
+      <div>
+        <span class="battery-value" id="percent">0</span>
+        <span class="battery-label">%</span>
+      </div>
+      <div>
+        <span class="battery-value" id="voltage">0.00</span>
+        <span class="battery-label">Volt</span>
+      </div>
+    </div>
+
+    <section class="battery-chart">
+      <canvas id="batChart" width="480" height="240"></canvas>
+    </section>
+
+    <div id="wsLog" class="log">WebSocket: nicht verbunden</div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,40 @@
+﻿# --- Allgemeines ---
+.DS_Store
+Thumbs.db
+.env
+*.log
+*.tmp
+
+# --- VS Code ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# --- Webfrontend ---
+node_modules/
+dist/
+build/
+.cache/
+.eslintcache
+
+# --- PlatformIO ---
+.pio/
+.clangd/
+
+# --- ESP-IDF ---
+build/
+sdkconfig
+sdkconfig.old
+sdkconfig.*
+cmake-build-*/
+
+# --- Firmware/Binaries ---
+*.bin
+*.elf
+*.map
+
+# --- Python cache ---
+*.pyc
+__pycache__/
