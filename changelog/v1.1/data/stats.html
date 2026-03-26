@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Statistiken</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/leaderboard.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="spiel.html">Spiel</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="stats.html">Statistiken</a></li>
+      <li><a href="battery.html">Akku</a></li>
+      <li class="nav-logout"><a class="logout-link" href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="dashboard-container stats-container">
+    <h1>Statistiken</h1>
+    <p class="stats-meta">&Uuml;berblick &uuml;ber alle Spieler.</p>
+
+    <div class="summary-card">
+      <ul class="summary-list">
+        <li>
+          <span class="summary-label">Spieler</span>
+          <span class="summary-value" id="summaryPlayers">0</span>
+        </li>
+        <li>
+          <span class="summary-label">Spiele gesamt</span>
+          <span class="summary-value" id="summaryGames">0</span>
+        </li>
+        <li>
+          <span class="summary-label">Beste Siegquote</span>
+          <span class="summary-value" id="summaryLeader">-</span>
+        </li>
+        <li>
+          <span class="summary-label">Deine Platzierung</span>
+          <span class="summary-value" id="summaryRank">-</span>
+        </li>
+      </ul>
+    </div>
+
+    <div id="emptyState" class="empty-state" hidden>
+      Noch keine Daten vorhanden.
+    </div>
+
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table id="statsTable" class="stats-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Spieler</th>
+              <th>Spiele</th>
+              <th>Siege</th>
+              <th>Niederlagen</th>
+              <th>Siegquote</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot>
+            <tr>
+              <th colspan="2">Summe</th>
+              <th id="tableTotalGames">0</th>
+              <th id="tableTotalWins">0</th>
+              <th id="tableTotalLosses">0</th>
+              <th>-</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

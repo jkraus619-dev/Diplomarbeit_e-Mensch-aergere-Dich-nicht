@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/ws-client.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/stats-dashboard.js" defer></script>
+  <script src="js/lobby.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+</head>
+
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="spiel.html">Spiel</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="stats.html">Statistiken</a></li>
+      <li><a href="battery.html">Akku</a></li>
+      <li class="nav-logout"><a class="logout-link" href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="dashboard-container">
+    <h1>Hallo, <span id="userDisplay"></span></h1>
+    <p class="dashboard-subtitle">Kurzer &Uuml;berblick &uuml;ber deine Spiele.</p>
+
+    <section class="stat-overview">
+      <article class="stat-card">
+        <span class="stat-label">Spiele</span>
+        <span class="stat-value" id="totalGames">0</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Siege</span>
+        <span class="stat-value" id="wonGames">0</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Niederlagen</span>
+        <span class="stat-value" id="lostGames">0</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Siegquote</span>
+        <span class="stat-value" id="winRate">0.0%</span>
+      </article>
+    </section>
+
+<div id="dashFeedback" class="dashboard-feedback"></div>
+    <div id="wsLog" class="log">WebSocket: nicht verbunden</div>
+  </main>
+</body>
+
+</html>

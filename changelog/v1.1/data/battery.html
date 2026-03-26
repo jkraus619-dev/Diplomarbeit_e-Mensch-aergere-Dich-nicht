@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Akku</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/ws-client.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/battery-ui.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+  <style>
+    .bat-page {
+      max-width: min(92%, 860px);
+      margin: 0 auto;
+      padding: 1.5rem 0 2rem;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #222;
+    }
+    .bat-card {
+      background: #fff;
+      border: 1px solid #d8d8d8;
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.4rem;
+    }
+    .bat-card h2 {
+      margin: 0 0 1rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #1b6d1a;
+    }
+    .live-row {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    #noDataHint {
+      color: #888;
+      font-size: 0.95rem;
+      padding: 0.5rem 0;
+    }
+    #histChart {
+      display: block;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="spiel.html">Spiel</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="stats.html">Statistiken</a></li>
+      <li><a href="battery.html">Akku</a></li>
+      <li class="nav-logout"><a class="logout-link" href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="bat-page">
+    <h1>Akku&uuml;berwachung</h1>
+    <p class="dashboard-subtitle">Live-Status und gespeicherter Verlauf.</p>
+
+    <!-- Live-Status -->
+    <div class="bat-card">
+      <h2>Live-Status</h2>
+      <div class="live-row">
+        <div class="battery-icon">
+          <div id="batteryFill" class="battery-fill"></div>
+        </div>
+        <div class="battery-meta">
+          <div>
+            <span class="battery-value" id="percent">0</span>
+            <span class="battery-label">%</span>
+          </div>
+          <div>
+            <span class="battery-value" id="voltage">0.00</span>
+            <span class="battery-label">Volt</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historisches Diagramm -->
+    <div class="bat-card">
+      <h2>Spannungsverlauf (SD-Karte)</h2>
+      <div id="noDataHint" style="display:none;">Noch keine Messdaten vorhanden.</div>
+      <canvas id="histChart" height="220"></canvas>
+    </div>
+
+    <div id="wsLog" class="log">WebSocket: nicht verbunden</div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('/api/battery')
+        .then(function (r) { return r.json(); })
+        .then(function (data) { drawHistChart(data); })
+        .catch(function () { drawHistChart([]); });
+    });
+
+    function drawHistChart(rawData) {
+      var canvas = document.getElementById('histChart');
+      var hint   = document.getElementById('noDataHint');
+
+      if (!Array.isArray(rawData) || rawData.length === 0) {
+        hint.style.display = 'block';
+        canvas.style.display = 'none';
+        return;
+      }
+
+      // Echte Timestamps bevorzugen (> Jahr 2001), Boot-Timestamps ignorieren
+      var hasReal = rawData.some(function(d) { return d.t > 1000000000; });
+      var data = hasReal
+        ? rawData.filter(function(d) { return d.t > 1000000000; })
+        : rawData;
+
+      if (data.length === 0) {
+        hint.style.display = 'block';
+        canvas.style.display = 'none';
+        return;
+      }
+
+      // Größe nach Container
+      var W = canvas.parentElement.clientWidth || 400;
+      canvas.width  = W;
+      canvas.height = 220;
+
+      var ctx = canvas.getContext('2d');
+      var PAD_L = 46, PAD_R = 12, PAD_T = 12, PAD_B = 36;
+      var chartW = W - PAD_L - PAD_R;
+      var chartH = canvas.height - PAD_T - PAD_B;
+
+      var V_MIN = 3.0, V_MAX = 4.2;
+
+      function xOf(i) {
+        return PAD_L + (i / (data.length - 1 || 1)) * chartW;
+      }
+      function yOf(v) {
+        var clamped = Math.max(V_MIN, Math.min(V_MAX, v));
+        return PAD_T + (1 - (clamped - V_MIN) / (V_MAX - V_MIN)) * chartH;
+      }
+
+      // Hintergrund
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, W, canvas.height);
+
+      // Hilfslinien Y (0.3V-Schritte)
+      ctx.strokeStyle = '#eee';
+      ctx.lineWidth = 1;
+      ctx.font = '11px Segoe UI,Arial';
+      ctx.fillStyle = '#888';
+      ctx.textAlign = 'right';
+      for (var v = V_MIN; v <= V_MAX + 0.01; v += 0.3) {
+        var y = yOf(v);
+        ctx.beginPath();
+        ctx.moveTo(PAD_L, y);
+        ctx.lineTo(PAD_L + chartW, y);
+        ctx.stroke();
+        ctx.fillText(v.toFixed(1) + 'V', PAD_L - 4, y + 4);
+      }
+
+      // Achsen
+      ctx.strokeStyle = '#bbb';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(PAD_L, PAD_T);
+      ctx.lineTo(PAD_L, PAD_T + chartH);
+      ctx.lineTo(PAD_L + chartW, PAD_T + chartH);
+      ctx.stroke();
+
+      // X-Beschriftung (max 6 Labels)
+      var step = Math.max(1, Math.floor(data.length / 6));
+      ctx.fillStyle = '#888';
+      ctx.textAlign = 'center';
+      for (var i = 0; i < data.length; i += step) {
+        var d = data[i];
+        var date = new Date(d.t * 1000);
+        var hh  = String(date.getHours()).padStart(2, '0');
+        var min = String(date.getMinutes()).padStart(2, '0');
+        var dd  = String(date.getDate()).padStart(2, '0');
+        var mm  = String(date.getMonth() + 1).padStart(2, '0');
+          var label;
+        if (data[0].t > 1000000000) {
+          var date = new Date(d.t * 1000);
+          var dd  = String(date.getDate()).padStart(2, '0');
+          var mm  = String(date.getMonth() + 1).padStart(2, '0');
+          var hh  = String(date.getHours()).padStart(2, '0');
+          var min = String(date.getMinutes()).padStart(2, '0');
+          label = dd + '.' + mm + ' ' + hh + ':' + min;
+        } else {
+          var elapsed = d.t - data[0].t;
+          label = elapsed < 60 ? (elapsed + 's') : (Math.floor(elapsed / 60) + 'min');
+        }
+        ctx.fillText(label, xOf(i), PAD_T + chartH + 20);
+      }
+
+      // Füllfläche unter der Linie
+      ctx.beginPath();
+      ctx.moveTo(xOf(0), yOf(data[0].v));
+      for (var i = 1; i < data.length; i++) {
+        ctx.lineTo(xOf(i), yOf(data[i].v));
+      }
+      ctx.lineTo(xOf(data.length - 1), PAD_T + chartH);
+      ctx.lineTo(xOf(0), PAD_T + chartH);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(27,109,26,0.08)';
+      ctx.fill();
+
+      // Linie
+      ctx.beginPath();
+      ctx.moveTo(xOf(0), yOf(data[0].v));
+      for (var i = 1; i < data.length; i++) {
+        ctx.lineTo(xOf(i), yOf(data[i].v));
+      }
+      ctx.strokeStyle = '#1b6d1a';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  </script>
+</body>
+</html>
