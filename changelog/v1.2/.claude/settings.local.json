@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(sed -i 's|<li class=\"\"nav-logout\"\"><a class=\"\"logout-link\"\" href=\"\"#\"\" onclick=\"\"logout\\(\\)\"\">Logout</a></li>|<li><a href=\"\"#\"\" onclick=\"\"sendWS\\(''''sleep''''\\)\"\">Ausschalten</a></li>\\\\n      <li class=\"\"nav-logout\"\"><a class=\"\"logout-link\"\" href=\"\"#\"\" onclick=\"\"logout\\(\\)\"\">Logout</a></li>|' \"c:/Users/julia/OneDrive/Desktop/Diplomarbeit/03 - Software \\(Code\\)/Mensch-ärgere-Dich-nicht/$f\")",
+      "Bash(done)"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ludo - Profil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/utils.js" defer></script>
+  <script src="js/session.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/stats-dashboard.js" defer></script>
+  <script src="js/profile-ui.js" defer></script>
+  <script src="js/page-init.js" defer></script>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="spiel.html">Spiel</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="stats.html">Statistiken</a></li>
+      <li><a href="battery.html">Akku</a></li>
+      <li><a href="#" onclick="sendWS('sleep')">Ausschalten</a></li>
+      <li class="nav-logout"><a class="logout-link" href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="dashboard-container profile-container">
+    <h1>Profil</h1>
+    <p class="profile-meta">Angemeldet als <strong id="profileName">-</strong></p>
+
+    <section class="profile-section">
+      <h2>Meine Werte</h2>
+      <ul class="profile-stats">
+        <li><span>Spiele gesamt</span><span id="profileTotal">0</span></li>
+        <li><span>Siege</span><span id="profileWon">0</span></li>
+        <li><span>Niederlagen</span><span id="profileLost">0</span></li>
+        <li><span>Siegquote</span><span><span id="profileWinRate">0.0</span>%</span></li>
+      </ul>
+    </section>
+
+    <section class="profile-section">
+      <h2>Passwort &auml;ndern</h2>
+      <form id="passwordForm" class="profile-form">
+        <div>
+          <label for="currentPassword">Aktuelles Passwort</label>
+          <input id="currentPassword" type="password" autocomplete="current-password" required>
+        </div>
+        <div>
+          <label for="newPassword">Neues Passwort</label>
+          <input id="newPassword" type="password" autocomplete="new-password" minlength="4" required>
+        </div>
+        <div>
+          <label for="confirmPassword">Neues Passwort best&auml;tigen</label>
+          <input id="confirmPassword" type="password" autocomplete="new-password" required>
+        </div>
+        <button type="submit">Speichern</button>
+        <div id="pwFeedback" class="feedback"></div>
+      </form>
+    </section>
+
+    <section class="profile-section reset-block">
+      <h2>Statistik zur&uuml;cksetzen</h2>
+      <p>Setzt Spiele, Siege und Niederlagen auf 0.</p>
+      <button type="button" id="resetStatsBtn">Statistik zur&uuml;cksetzen</button>
+      <div id="resetFeedback" class="feedback"></div>
+    </section>
+
+  </main>
+</body>
+</html>

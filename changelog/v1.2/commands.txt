@@ -1,0 +1,9 @@
+{"cmd":"a","v":"1"}
+
+
+
+msg:
+
+roll
+startGame
+battery?
